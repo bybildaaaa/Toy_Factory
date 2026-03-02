@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+<div class="product-card">
+    <div class="product-image">
+        {% if toy.image %}
+            <img src="{{ toy.image.url }}" alt="{{ toy.name }}">
+        {% else %}
+            <img src="{% static 'images/no-image.png' %}" alt="Нет фото">
+        {% endif %}
+    </div>
+
+    <div class="product-info">
+        <h2 class="product-title">{{ toy.name }}</h2>
+        <p><b>Артикул:</b> {{ toy.code }}</p>
+        <p><b>Вид:</b> {{ toy.toy_type }}</p>
+        <p><b>Производитель:</b> {{ toy.manufacturer }}</p>
+        <p class="price"><b>Цена:</b> {{ toy.price }} ₽</p>
+        <p><b>В наличии:</b> {{ toy.in_stock }}</p>
+
+        <p class="description">{{ toy.description }}</p>
+
+        {% if user|is_client and toy.is_active and toy.in_stock > 0 %}
+            <form action="{% url 'production:add_to_cart' toy.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Добавить в корзину</button>
+            </form>
+        {% elif toy.is_active and toy.in_stock > 0 %}
+            <p><em>Только для покупателей</em></p>
+        {% else %}
+            <p class="out-of-stock"><em>Нет в наличии</em></p>
+        {% endif %}
+
+        <a href="{% url 'production:catalog' %}" class="back-link">← Назад в каталог</a>
+    </div>
+</div>
+{% endblock %}

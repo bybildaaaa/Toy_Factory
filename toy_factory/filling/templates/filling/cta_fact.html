@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+    <h1>Случайный факт о кошках</h1>
+
+    {% if error %}
+        <div>{{ error }}</div>
+    {% else %}
+        <div>
+            <div>{{ setup }}</div>
+            <div>{{ punchline }}</div>
+        </div>
+    {% endif %}
+
+    <button onclick="window.location.reload()">Ещё факт</button>
+
+{% endblock %}
